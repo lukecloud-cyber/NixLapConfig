@@ -12,6 +12,7 @@ Luke's NixOS configuration — flake-based, with secrets managed by [sops-nix](h
 ├── home.nix                   # User config (Home Manager): shell, git, prompt, aliases
 ├── starship.toml              # Starship prompt theme (read by home.nix at build time)
 ├── hardware-configuration.nix # Auto-generated hardware/disk config — machine-specific
+├── my_nix_config.md         # Human-readable config summary (copied from ~/ by nixswitch)
 ├── .sops.yaml                 # Tells sops which age key encrypts which files
 └── secrets/
     ├── secrets.yaml           # Encrypted secrets (safe to commit — ciphertext only)
@@ -41,6 +42,26 @@ Then reference it in `home.nix` Fish shellInit as `cat /run/secrets/my_new_secre
 sudo nix flake update --flake /etc/nixos
 sudo nixos-rebuild switch --flake /etc/nixos#nixos
 ```
+
+---
+
+## Restoring config on an existing system
+
+If you need to pull your config onto an already-running NixOS system (e.g. after a reinstall where you didn't clone during setup, or syncing to a second machine):
+
+```bash
+# Clone to a safe location — do NOT clone directly into /etc/nixos
+git clone https://github.com/luke-c/NixLapConfig ~/nixos-restore
+
+# Place the age key
+mkdir -p ~/nixos-restore/secrets
+nano ~/nixos-restore/secrets/age-key.txt   # paste from Bitwarden
+
+# Build and switch from the clone
+sudo nixos-rebuild switch --flake ~/nixos-restore#nixos
+```
+
+Once you're happy, you can make the clone your working directory by updating `FLAKE_DIR` in `~/nixswitch`, or copy it over to `/etc/nixos/`.
 
 ---
 
