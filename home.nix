@@ -1,7 +1,13 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   home.stateVersion = "25.11";
+
+  # KWin focus policy — windows gain focus on hover without clicking
+  home.activation.kwinFocusFollowsMouse = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    $DRY_RUN_CMD ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 --file kwinrc --group Windows --key FocusPolicy FocusFollowsMouse
+    $DRY_RUN_CMD ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 --file kwinrc --group Windows --key NextFocusPrefersMouse true
+  '';
 
   # User-level packages — things only luke needs, not the whole system
   home.packages = with pkgs; [
@@ -30,7 +36,8 @@
       ls   = "eza";
       ll   = "eza -l";
       la   = "eza -la";
-      tree = "eza --tree";
+      tree      = "eza --tree";
+      nixswitch = "~/nixswitch";
     };
     # Read secrets from sops-managed files at /run/secrets/ (decrypted at boot by sops-nix)
     # Using shellInit instead of sessionVariables so the value is read at login time, not baked in at build time
