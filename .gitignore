@@ -1,0 +1,2 @@
+# Age private key — NEVER commit this. Back it up to Bitwarden.
+secrets/age-key.txt

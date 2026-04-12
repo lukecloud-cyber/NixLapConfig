@@ -1,0 +1,7 @@
+keys:
+  - &luke age1srnzl36smrhrquwc6z5hzwuehqq2y6q74fvlg7l8g6304sganqxqmxed9l
+creation_rules:
+  - path_regex: secrets/secrets.yaml$
+    key_groups:
+      - age:
+          - *luke
