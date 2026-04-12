@@ -91,9 +91,15 @@
       vcs-files = pkgs.yaziPlugins.vcs-files;
     };
 
-    initLua = ''
-      require("vcs-files"):setup()
-    '';
+    keymap = {
+      manager.prepend_keymap = [
+        {
+          on = [ "g" "c" ];
+          run = "plugin vcs-files";
+          desc = "Show Git file changes";
+        }
+      ];
+    };
   };
 
   # Starship prompt — personal preference, belongs with the user
