@@ -31,6 +31,9 @@
   # Fish shell — user-level config (configuration.nix still enables fish as a login shell)
   programs.fish = {
     enable = true;
+    shellAbbrs = {
+      ff = "clear && fastfetch";
+    };
     shellAliases = {
       cat  = "bat";
       ls   = "eza";
