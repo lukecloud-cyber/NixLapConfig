@@ -61,6 +61,41 @@
     '';
   };
 
+  # Yazi — TUI file manager with directory tree and file preview
+  programs.yazi = {
+    enable = true;
+    enableFishIntegration = true;  # provides `y` shell wrapper that cd's on exit
+
+    extraPackages = with pkgs; [
+      ueberzugpp  # image previews in terminals that don't support kitty/sixel natively
+    ];
+
+    settings = {
+      manager = {
+        show_hidden = false;
+        sort_by = "natural";
+        sort_dir_first = true;
+        show_symlink = true;
+      };
+      preview = {
+        tab_size = 2;
+        max_width = 600;
+        max_height = 900;
+        image_quality = 75;
+        image_filter = "lanczos3";
+      };
+    };
+
+    plugins = {
+      glow = pkgs.yaziPlugins.glow;
+      vcs-files = pkgs.yaziPlugins.vcs-files;
+    };
+
+    initLua = ''
+      require("vcs-files"):setup()
+    '';
+  };
+
   # Starship prompt — personal preference, belongs with the user
   programs.starship = {
     enable = true;
