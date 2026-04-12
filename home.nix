@@ -9,6 +9,15 @@
     $DRY_RUN_CMD ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 --file kwinrc --group Windows --key NextFocusPrefersMouse true
   '';
 
+  # Autostart Vesktop on login
+  xdg.configFile."autostart/vesktop.desktop".text = ''
+    [Desktop Entry]
+    Type=Application
+    Name=Vesktop
+    Exec=vesktop
+    X-GNOME-Autostart-enabled=true
+  '';
+
   # User-level packages — things only luke needs, not the whole system
   home.packages = with pkgs; [
     kdePackages.kate  # KDE advanced text editor
