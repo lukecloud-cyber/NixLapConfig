@@ -72,7 +72,7 @@
 
     settings = {
       manager = {
-        show_hidden = false;
+        show_hidden = true;
         sort_by = "natural";
         sort_dir_first = true;
         show_symlink = true;
