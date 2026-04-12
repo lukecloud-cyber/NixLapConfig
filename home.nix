@@ -14,6 +14,7 @@
     kdePackages.kate  # KDE advanced text editor
     glow              # CLI MD terminal renderer
     nodejs_22         # Required for npx-based MCP servers (e.g. context7)
+    rclone            # CLI tool to sync files to/from cloud storage (S3, Google Drive, etc.)
   ];
 
   # Git config — user identity belongs here, not in system config
