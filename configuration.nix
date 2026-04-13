@@ -6,7 +6,7 @@
 
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [ # Hardware config — copy from /etc/nixos/hardware-configuration.nix after fresh install
       ./hardware-configuration.nix
       # Home Manager as a NixOS module — manages user environment declaratively
     ];
@@ -15,10 +15,9 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  # Use latest kernel.
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  # Use stable kernel for reliable boot (switch to linuxPackages_latest after confirming boot works)
+  boot.kernelPackages = pkgs.linuxPackages;
 
-  boot.initrd.luks.devices."luks-1db9a3db-9ae4-4d81-b981-4617b2e23cda".device = "/dev/disk/by-uuid/1db9a3db-9ae4-4d81-b981-4617b2e23cda";
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 

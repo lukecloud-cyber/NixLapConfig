@@ -1,0 +1,64 @@
+#!/usr/bin/env fish
+
+set flake_dir ~/projects/NixLapConfig
+set commit_msg ""
+set do_update false
+
+# Parse arguments
+set i 1
+while test $i -le (count $argv)
+    switch $argv[$i]
+        case update
+            set do_update true
+        case --commit
+            set i (math $i + 1)
+            if test $i -le (count $argv)
+                set commit_msg $argv[$i]
+            else
+                echo "Error: --commit requires a message"
+                exit 1
+            end
+        case '*'
+            echo "Usage: nixswitch [update] [--commit \"message\"]"
+            exit 1
+    end
+    set i (math $i + 1)
+end
+
+# Update flake inputs if requested
+if test $do_update = true
+    echo "Updating flake inputs..."
+    nix flake update --flake $flake_dir
+    or begin
+        echo "Flake update failed."
+        exit 1
+    end
+end
+
+# Copy dotfiles into repo
+echo "Syncing dotfiles..."
+cp ~/my_nix_config.md $flake_dir/
+
+# Rebuild
+echo "Rebuilding NixOS..."
+sudo nixos-rebuild switch --flake $flake_dir#nixos
+or begin
+    echo "Rebuild failed."
+    exit 1
+end
+
+echo "Rebuild successful."
+
+# Prompt for commit message if not provided via --commit
+if test -z "$commit_msg"
+    read -P "Commit message (empty to skip): " commit_msg
+end
+
+# Commit and push if a message was given
+if test -n "$commit_msg"
+    cd $flake_dir
+    git add -A
+    git commit -m "$commit_msg"
+    git push
+    echo "Committed and pushed."
+end

@@ -3,6 +3,12 @@
 {
   home.stateVersion = "25.11";
 
+  # Symlink nixswitch script into ~/nixswitch from the repo
+  home.file."nixswitch" = {
+    source = ./nixswitch;
+    executable = true;
+  };
+
   # KWin focus policy — windows gain focus on hover without clicking
   home.activation.kwinFocusFollowsMouse = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     $DRY_RUN_CMD ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 --file kwinrc --group Windows --key FocusPolicy FocusFollowsMouse
