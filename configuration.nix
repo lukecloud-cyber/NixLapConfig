@@ -168,19 +168,17 @@
   sops.secrets.github_pat = { owner = "luke"; }; # decrypts to /run/secrets/github_pat at boot
   # hermes_env: add to secrets.yaml with:
   #   SOPS_AGE_KEY_FILE=/etc/nixos/secrets/age-key.txt sops secrets/secrets.yaml
-  # Contents should be KEY=VALUE pairs, e.g.:
-  #   OPENROUTER_API_KEY=sk-or-...
-  #   ANTHROPIC_API_KEY=sk-ant-...   (optional, if not using OpenRouter)
-  #   TELEGRAM_BOT_TOKEN=...         (optional, for Telegram gateway)
+  # Add the following key:
+  #   hermes_env: "GLM_API_KEY=your-zai-key-here"
   sops.secrets.hermes_env = { owner = "hermes"; }; # decrypts to /run/secrets/hermes_env at boot
 
   # Hermes Agent — AI agent gateway service
   # Runs `hermes gateway` as a systemd service under the hermes user.
-  # Needs at minimum OPENROUTER_API_KEY (or ANTHROPIC_API_KEY) in hermes_env secret.
   services.hermes-agent = {
     enable = true;
     settings = {
-      model = "anthropic/claude-sonnet-4-6";
+      model = "glm-4.5";
+      provider = "zai";
       terminal.backend = "local";
     };
     environmentFiles = [ config.sops.secrets.hermes_env.path ];
